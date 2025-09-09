@@ -1,3 +1,8 @@
+"""
+Django settings for gulflimo project.
+...
+"""
+
 import os
 import dj_database_url
 from pathlib import Path
@@ -5,10 +10,11 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.environ.get('SECRET_KEY', 'your-secret-key-here')
+# Quick-start development settings - unsuitable for production
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-f7p4-35m)d9zdvtqj5d(sr_9l803_afa122a^6o#xai-!ue_4f')
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['*']  # Allow all hosts for now, you can restrict later
 
 # Application definition
 INSTALLED_APPS = [
@@ -19,12 +25,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'whitenoise.runserver_nostatic',  # Add this
+    'whitenoise.runserver_nostatic',  # Add this for whitenoise
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # Add this
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # Add this for static files
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -53,6 +59,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'gulflimo.wsgi.application'
 
 # Database
+# Use PostgreSQL on Heroku, SQLite locally
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -89,18 +96,18 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]  # Add this back
 
 # Simplified static file serving with whitenoise
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-# Default primary key field type
-DEFAULT_AUTO_FIELD = 'django.contrib.db.models.BigAutoField'
 
 # Authentication settings
 LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/accounts/login/'
 LOGOUT_REDIRECT_URL = '/accounts/login/'
+
+# FIXED: Correct DEFAULT_AUTO_FIELD setting
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Security settings for production
 if not DEBUG:
@@ -108,7 +115,3 @@ if not DEBUG:
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
-
-# Remove django_heroku import and usage
-# import django_heroku
-# django_heroku.settings(locals())
