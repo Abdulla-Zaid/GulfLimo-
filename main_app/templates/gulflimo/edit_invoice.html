@@ -1,0 +1,115 @@
+<!-- templates/gulflimo/edit_invoice.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Edit Invoice #{{ invoice.invoice_number }}</h2>
+    
+    <form method="post">
+        {% csrf_token %}
+        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="id_mobile_number">Mobile Number</label>
+                    {{ form.mobile_number }}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="id_invoice_date">Invoice Date</label>
+                    {{ form.invoice_date }}
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="id_due_date">Due Date</label>
+                    {{ form.due_date }}
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="id_bill_to">Bill To</label>
+            {{ form.bill_to }}
+        </div>
+        
+        <h4 class="mt-4">Items</h4>
+        <div id="items-container">
+            {% for item in items %}
+            <div class="item-row row mb-2">
+                <div class="col-md-5">
+                    <input type="text" name="description" class="form-control" placeholder="Description" value="{{ item.description }}" required>
+                </div>
+                <div class="col-md-2">
+                    <input type="number" name="quantity" class="form-control" placeholder="Qty" value="{{ item.quantity }}" min="1" required>
+                </div>
+                <div class="col-md-3">
+                    <input type="number" name="price" class="form-control" placeholder="Price" value="{{ item.price }}" step="0.01" min="0" required>
+                </div>
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-danger remove-item">Remove</button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <button type="button" id="add-item" class="btn btn-secondary mt-2">Add Item</button>
+        
+        <div class="mt-4">
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+            <a href="{% url 'invoice_detail' invoice.id %}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const itemsContainer = document.getElementById('items-container');
+    const addItemBtn = document.getElementById('add-item');
+    
+    addItemBtn.addEventListener('click', function() {
+        const newRow = document.createElement('div');
+        newRow.className = 'item-row row mb-2';
+        newRow.innerHTML = `
+            <div class="col-md-5">
+                <input type="text" name="description" class="form-control" placeholder="Description" required>
+            </div>
+            <div class="col-md-2">
+                <input type="number" name="quantity" class="form-control" placeholder="Qty" value="1" min="1" required>
+            </div>
+            <div class="col-md-3">
+                <input type="number" name="price" class="form-control" placeholder="Price" step="0.01" min="0" required>
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="btn btn-danger remove-item">Remove</button>
+            </div>
+        `;
+        itemsContainer.appendChild(newRow);
+        
+        // Add event listener to the new remove button
+        newRow.querySelector('.remove-item').addEventListener('click', function() {
+            if (document.querySelectorAll('.item-row').length > 1) {
+                this.closest('.item-row').remove();
+            } else {
+                alert('At least one item is required.');
+            }
+        });
+    });
+    
+    // Add event listeners to existing remove buttons
+    document.querySelectorAll('.remove-item').forEach(button => {
+        button.addEventListener('click', function() {
+            if (document.querySelectorAll('.item-row').length > 1) {
+                this.closest('.item-row').remove();
+            } else {
+                alert('At least one item is required.');
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

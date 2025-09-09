@@ -1,0 +1,112 @@
+/* static/css/pdf_styles.css */
+@page {
+    size: A4;
+    margin: 1cm;
+    
+    @top-left {
+        content: element(header);
+    }
+    
+    @bottom-center {
+        content: element(footer);
+    }
+}
+
+body {
+    font-family: Arial, sans-serif;
+    color: #333;
+    background-image: url('../images/background.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.invoice-container {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.header {
+    position: running(header);
+    width: 100%;
+    text-align: center;
+}
+
+.footer {
+    position: running(footer);
+    width: 100%;
+    text-align: center;
+    font-size: 10pt;
+}
+
+.logo {
+    width: 150px;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.company-name {
+    font-size: 18pt;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.company-email {
+    font-size: 10pt;
+    color: #7f8c8d;
+}
+
+.invoice-title {
+    text-align: center;
+    font-size: 16pt;
+    margin: 20px 0;
+    color: #2c3e50;
+}
+
+.bill-to {
+    margin-bottom: 20px;
+}
+
+.invoice-details {
+    margin-bottom: 20px;
+}
+
+.invoice-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+.invoice-table th {
+    background-color: #f8f9fa;
+    padding: 10px;
+    text-align: left;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.invoice-table td {
+    padding: 10px;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.invoice-table tfoot td {
+    font-weight: bold;
+    border-top: 2px solid #dee2e6;
+}
+
+.total-row {
+    font-weight: bold;
+}
+
+.thank-you {
+    text-align: center;
+    margin-top: 30px;
+    font-style: italic;
+}
+
+.arabic-text {
+    font-family: 'Arial', sans-serif;
+    direction: rtl;
+    font-size: 12pt;
+}

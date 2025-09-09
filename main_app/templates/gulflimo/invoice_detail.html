@@ -1,0 +1,83 @@
+<!-- templates/gulflimo/invoice_detail.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center">
+        <h2>Invoice #{{ invoice.invoice_number }}</h2>
+        <div>
+            <a href="{% url 'edit_invoice' invoice.id %}" class="btn btn-warning">Edit</a>
+            <a href="{% url 'generate_pdf' invoice.id %}" class="btn btn-primary">Download PDF</a>
+        </div>
+    </div>
+    
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Bill To</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>{{ invoice.bill_to }}</strong></p>
+                    <p><strong>Mobile:</strong> {{ invoice.mobile_number }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Invoice Details</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Invoice Date:</strong> {{ invoice.invoice_date }}</p>
+                    <p><strong>Due Date:</strong> {{ invoice.due_date }}</p>
+                    <p><strong>Created By:</strong> {{ invoice.created_by.username }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card mt-4">
+        <div class="card-header">
+            <h5>Items</h5>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered">
+                <thead class="thead-light">
+                    <tr>
+                        <th>Description</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in invoice.items.all %}
+                    <tr>
+                        <td>{{ item.description }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>{{ item.price }} BHD</td>
+                        <td>{{ item.total }} BHD</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3" class="text-right"><strong>Total Amount:</strong></td>
+                        <td><strong>{{ invoice.total_amount }} BHD</strong></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+    
+    <div class="mt-4 text-center">
+        <p>Thanks, we are happy to work with you.</p>
+        <p>GulfLimo - ليمو الخليج</p>
+    </div>
+    
+    <div class="mt-4">
+        <a href="{% url 'search_invoices' %}" class="btn btn-secondary">Back to Search</a>
+    </div>
+</div>
+{% endblock %}
