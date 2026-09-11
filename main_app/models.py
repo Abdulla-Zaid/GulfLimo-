@@ -3,8 +3,6 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.core.validators import MinValueValidator, MaxValueValidator
-import random
-import string
 import uuid
 
 class BrandSettings(models.Model):
@@ -144,9 +142,9 @@ class InvoiceItem(models.Model):
     description_ar = models.CharField(max_length=300, blank=True)
     quantity = models.DecimalField(max_digits=10, decimal_places=3, default=1)
     price = models.DecimalField(max_digits=12, decimal_places=3)
-    unit = models.CharField(max_length=50, default='Qty', blank=True)  # e.g., "Hour", "Day", etc.
+    unit = models.CharField(max_length=50, default='Qty', blank=True)
     unit_ar = models.CharField(max_length=50, default='', blank=True)
-    order = models.PositiveIntegerField(default=0)  # For ordering items
+    order = models.PositiveIntegerField(default=0)
     
     class Meta:
         ordering = ['order', 'id']

@@ -45,59 +45,9 @@ class BrandSettingsForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_method = 'post'
-        self.helper.layout = Layout(
-            Fieldset('Company Information',
-                Row(
-                    Column('company_name', css_class='col-md-6'),
-                    Column('company_name_ar', css_class='col-md-6'),
-                ),
-                Row(
-                    Column('company_email', css_class='col-md-6'),
-                    Column('company_phone', css_class='col-md-6'),
-                ),
-                Row(
-                    Column('company_address', css_class='col-md-6'),
-                    Column('company_address_ar', css_class='col-md-6'),
-                ),
-            ),
-            Fieldset('Branding',
-                Row(
-                    Column('logo', css_class='col-md-6'),
-                    Column('logo_ar', css_class='col-md-6'),
-                ),
-                Row(
-                    Column('background_image', css_class='col-md-6'),
-                    Column('favicon', css_class='col-md-6'),
-                ),
-            ),
-            Fieldset('PDF Customization',
-                Row(
-                    Column('pdf_header_color', css_class='col-md-3'),
-                    Column('pdf_footer_color', css_class='col-md-3'),
-                    Column('pdf_text_color', css_class='col-md-3'),
-                    Column('pdf_accent_color', css_class='col-md-3'),
-                ),
-            ),
-            Fieldset('Invoice Settings',
-                Row(
-                    Column('invoice_footer_text', css_class='col-md-6'),
-                    Column('invoice_footer_text_ar', css_class='col-md-6'),
-                ),
-                Row(
-                    Column('invoice_terms', css_class='col-md-6'),
-                    Column('invoice_terms_ar', css_class='col-md-6'),
-                ),
-                Row(
-                    Column('currency_symbol', css_class='col-md-4'),
-                    Column('decimal_places', css_class='col-md-4'),
-                ),
-                Row(
-                    Column('show_logo', css_class='col-md-6'),
-                    Column('show_qr_code', css_class='col-md-6'),
-                ),
-            ),
-            Submit('submit', 'Save Settings', css_class='btn btn-primary btn-lg mt-4')
-        )
+        self.helper.form_class = 'form-horizontal'
+        self.helper.label_class = 'col-lg-3'
+        self.helper.field_class = 'col-lg-9'
 
 class InvoiceForm(forms.ModelForm):
     class Meta:
@@ -121,31 +71,6 @@ class InvoiceForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_method = 'post'
-        self.helper.layout = Layout(
-            Fieldset('Invoice Information',
-                Row(
-                    Column('invoice_date', css_class='col-md-4'),
-                    Column('due_date', css_class='col-md-4'),
-                    Column('tax_rate', css_class='col-md-4'),
-                ),
-                Row(
-                    Column('bill_to', css_class='col-md-6'),
-                    Column('bill_to_ar', css_class='col-md-6'),
-                ),
-                Row(
-                    Column('mobile_number', css_class='col-md-6'),
-                    Column('email', css_class='col-md-6'),
-                ),
-                Row(
-                    Column('discount_type', css_class='col-md-6'),
-                    Column('discount_value', css_class='col-md-6'),
-                ),
-                Row(
-                    Column('notes', css_class='col-md-6'),
-                    Column('notes_ar', css_class='col-md-6'),
-                ),
-            ),
-        )
 
 class InvoiceItemForm(forms.ModelForm):
     class Meta:
@@ -158,30 +83,6 @@ class InvoiceItemForm(forms.ModelForm):
             'price': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.001', 'min': '0'}),
             'unit': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Unit (Qty, Hour, Day)'}),
             'unit_ar': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'الوحدة', 'dir': 'rtl'}),
-        }
-
-class InvoiceTemplateForm(forms.ModelForm):
-    class Meta:
-        model = InvoiceTemplate
-        fields = ['name', 'description', 'default_bill_to', 'default_mobile', 'default_email', 'tax_rate', 'is_default']
-        widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control'}),
-            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
-            'default_bill_to': forms.TextInput(attrs={'class': 'form-control'}),
-            'default_mobile': forms.TextInput(attrs={'class': 'form-control'}),
-            'default_email': forms.EmailInput(attrs={'class': 'form-control'}),
-            'tax_rate': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01'}),
-            'is_default': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
-        }
-
-class TemplateItemForm(forms.ModelForm):
-    class Meta:
-        model = TemplateItem
-        fields = ['description', 'price', 'unit']
-        widgets = {
-            'description': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Item Description'}),
-            'price': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.001', 'min': '0'}),
-            'unit': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Unit'}),
         }
 
 class SearchInvoiceForm(forms.Form):

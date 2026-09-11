@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'whitenoise.runserver_nostatic',
     'crispy_forms',
     'crispy_bootstrap5',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
@@ -54,7 +55,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.i18n',
-                'main_app.context_processors.brand_settings',  # Custom context
+                'main_app.context_processors.brand_settings',
             ],
         },
     },
