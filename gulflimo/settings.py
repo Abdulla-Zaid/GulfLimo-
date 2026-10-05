@@ -13,11 +13,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-f7p4-35m)d9zdvtqj5d(sr_9l803_afa122a^6o#xai-!ue_4f')
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
-# Get Heroku domain dynamically
-HEROKU_DOMAIN = os.environ.get('HEROKU_APP_NAME')
-ALLOWED_HOSTS = ['*']
-if HEROKU_DOMAIN:
-    ALLOWED_HOSTS = [f'{HEROKU_DOMAIN}.herokuapp.com', 'localhost', '127.0.0.1']
+# ALLOWED HOSTS - Trust Heroku domain and localhost
+ALLOWED_HOSTS = [
+    'gulflimo-f71ab9ca90c7.herokuapp.com',
+    'localhost',
+    '127.0.0.1',
+    '.herokuapp.com',
+]
 
 # Application definition
 INSTALLED_APPS = [
@@ -59,6 +61,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.i18n',
+                'django.template.context_processors.csrf',  # Add CSRF context processor
                 'main_app.context_processors.brand_settings',
             ],
         },
@@ -133,25 +136,40 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
-# CSRF Settings
+# ==================== CSRF & Security Settings ====================
+
+# CSRF Trusted Origins - Allow Heroku domain
 CSRF_TRUSTED_ORIGINS = [
+    'https://gulflimo-f71ab9ca90c7.herokuapp.com',
     'https://*.herokuapp.com',
     'http://localhost:8000',
     'http://127.0.0.1:8000',
 ]
 
-if HEROKU_DOMAIN:
-    CSRF_TRUSTED_ORIGINS.append(f'https://{HEROKU_DOMAIN}.herokuapp.com')
+# CSRF Cookie Settings
+CSRF_COOKIE_SECURE = True  # Only send cookie over HTTPS
+CSRF_COOKIE_HTTPONLY = False  # Allow JavaScript to read (needed for AJAX)
+CSRF_COOKIE_SAMESITE = 'Lax'  # Prevent cross-site cookie submission
 
-# Cookie settings
-SESSION_COOKIE_SECURE = not DEBUG
-CSRF_COOKIE_SECURE = not DEBUG
-CSRF_COOKIE_HTTPONLY = False  # Allow JS to read CSRF token
+# Session Cookie Settings
+SESSION_COOKIE_SECURE = True  # Only send over HTTPS
+SESSION_COOKIE_HTTPONLY = True  # Don't allow JS to read session
+SESSION_COOKIE_SAMESITE = 'Lax'
 
-# Security settings for production
-if not DEBUG:
-    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-    SECURE_SSL_REDIRECT = True
-    SECURE_HSTS_SECONDS = 31536000
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-    SECURE_HSTS_PRELOAD = True
+# Security headers
+SECURE_SSL_REDIRECT = not DEBUG  # Redirect HTTP to HTTPS
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')  # Trust Heroku proxy
+SECURE_HSTS_SECONDS = 31536000  # 1 year
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+
+# X-Frame-Options to prevent clickjacking
+X_FRAME_OPTIONS = 'DENY'
+
+# Content Security Policy
+SECURE_CONTENT_SECURITY_POLICY = {
+    'default-src': ("'self'", 'https:'),
+    'script-src': ("'self'", "'unsafe-inline'", 'https:'),
+    'style-src': ("'self'", "'unsafe-inline'", 'https:'),
+    'img-src': ("'self'", 'data:', 'https:'),
+}
