@@ -4,10 +4,13 @@ asn1crypto==1.5.1
 certifi==2025.8.3
 cffi==2.1.1
 charset-normalizer==3.4.3
+crispy-bootstrap5==2024.10
 cryptography==45.0.7
 cssselect2==0.8.0
 dj-database-url==3.0.1
 Django==5.2.5
+django-crispy-forms==2.3
+django-filter==24.3
 django-heroku==0.3.1
 gunicorn==23.0.0
 html5lib==1.1
