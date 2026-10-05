@@ -13,7 +13,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-f7p4-35m)d9zdvtqj5d(sr_9l803_afa122a^6o#xai-!ue_4f')
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = ['*']  # Allow all hosts for now, you can restrict later
+# Get Heroku domain dynamically
+HEROKU_DOMAIN = os.environ.get('HEROKU_APP_NAME')
+ALLOWED_HOSTS = ['*']
+if HEROKU_DOMAIN:
+    ALLOWED_HOSTS = [f'{HEROKU_DOMAIN}.herokuapp.com', 'localhost', '127.0.0.1']
 
 # Application definition
 INSTALLED_APPS = [
@@ -129,9 +133,25 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
+# CSRF Settings
+CSRF_TRUSTED_ORIGINS = [
+    'https://*.herokuapp.com',
+    'http://localhost:8000',
+    'http://127.0.0.1:8000',
+]
+
+if HEROKU_DOMAIN:
+    CSRF_TRUSTED_ORIGINS.append(f'https://{HEROKU_DOMAIN}.herokuapp.com')
+
+# Cookie settings
+SESSION_COOKIE_SECURE = not DEBUG
+CSRF_COOKIE_SECURE = not DEBUG
+CSRF_COOKIE_HTTPONLY = False  # Allow JS to read CSRF token
+
 # Security settings for production
 if not DEBUG:
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     SECURE_SSL_REDIRECT = True
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
