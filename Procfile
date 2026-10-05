@@ -1,1 +1,0 @@
-web: gunicorn gulflimo.wsgi --log-file -
