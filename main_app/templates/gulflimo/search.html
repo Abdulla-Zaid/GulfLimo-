@@ -1,0 +1,52 @@
+<!-- templates/gulflimo/search.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Search Invoices</h2>
+    
+    <form method="get" class="mb-4">
+        <div class="input-group">
+            <input type="text" name="q" class="form-control" placeholder="Search by invoice number or mobile number" value="{{ query }}">
+            <div class="input-group-append">
+                <button class="btn btn-primary" type="submit">Search</button>
+            </div>
+        </div>
+    </form>
+    
+    {% if query %}
+        {% if invoices %}
+            <h3>Search Results</h3>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Invoice Number</th>
+                        <th>Bill To</th>
+                        <th>Mobile Number</th>
+                        <th>Invoice Date</th>
+                        <th>Total Amount</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for invoice in invoices %}
+                    <tr>
+                        <td>{{ invoice.invoice_number }}</td>
+                        <td>{{ invoice.bill_to }}</td>
+                        <td>{{ invoice.mobile_number }}</td>
+                        <td>{{ invoice.invoice_date }}</td>
+                        <td>{{ invoice.total_amount }} BHD</td>
+                        <td>
+                            <a href="{% url 'invoice_detail' invoice.id %}" class="btn btn-sm btn-info">View</a>
+                            <a href="{% url 'generate_pdf' invoice.id %}" class="btn btn-sm btn-primary">PDF</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No invoices found for "{{ query }}".</p>
+        {% endif %}
+    {% endif %}
+</div>
+{% endblock %}

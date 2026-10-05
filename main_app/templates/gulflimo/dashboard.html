@@ -1,0 +1,21 @@
+<!-- templates/gulflimo/dashboard.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Welcome to GulfLimo</h2>
+    <p>Manage your invoices efficiently with our system.</p>
+    
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Quick Actions</h5>
+                    <a href="{% url 'create_invoice' %}" class="btn btn-primary">Create New Invoice</a>
+                    <a href="{% url 'search_invoices' %}" class="btn btn-secondary">Search Invoices</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
